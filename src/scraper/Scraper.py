@@ -1,6 +1,4 @@
 import re
-import sys
-import codecs
 import logging
 import requests
 import pandas as pd
@@ -8,8 +6,6 @@ import pandas as pd
 from itertools import chain
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
-
-sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 class Scraper:
     

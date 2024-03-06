@@ -1,9 +1,5 @@
 import re
-import sys
-import codecs
 import logging
-
-sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 class Standardizer:
     
@@ -82,7 +78,7 @@ class Standardizer:
     def run(self, raw_data):
         try:
             df = raw_data
-            
+
             df['model'] = df['title'].apply(lambda x: self.ModelName(x))
             df['color'] = df['title'].apply(lambda x: self.ColorName(x))
             df['rating'] = df['rating'].apply(lambda x: self.Rating(x))
@@ -93,6 +89,7 @@ class Standardizer:
             df['battery_power'] = df['battery'].apply(lambda x: self.BattPower(x))
             
             df = df.dropna()
+            df = df[['url', 'title', 'rating', 'display', 'camera', 'battery', 'model', 'color', 'RAM/ROM', 'price'] + [col for col in df.columns if col not in ['url', 'title', 'rating', 'price', 'display', 'camera', 'battery', 'model', 'color', 'RAM/ROM']]]
             
             return df
         except Exception as e:

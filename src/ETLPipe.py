@@ -1,10 +1,8 @@
 import logging
-import pandas as pd
 
 from src.scraper.Scraper import Scraper
 from src.standardizer.Standardizer import Standardizer
-# from src.process.Processor import ProcessModel
-# from src.load.Load import Load
+from src.process.Processor import ProcessModel
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,21 +31,17 @@ class ETLPipeline:
             logging.error('An Error Occured:', exc_info=e)
             raise e
         
-    def filter_data(self, transformed_data):
+    def filter_data(self, transformed_data, price):
         try:
-            pass
+            filtered_data = ProcessModel()
+            filtered_data = filtered_data.run(transformed_data, price)
+            
+            return filtered_data
         except Exception as e:
             logging.error('An Error Occured:', exc_info=e)
             raise e
         
-    def load_data(self, filtered_data):
-        try:
-            pass
-        except Exception as e:
-            logging.error('An Error Occured:', exc_info=e)
-            raise e
-        
-    def run(self, query):
+    def run(self, query, price):
         try:
             logging.info(f'Scraping {query} Data...')
             raw_data = self.extract_data(query)
@@ -55,7 +49,10 @@ class ETLPipeline:
             logging.info(f'Standardizing {query} Data...')
             transformed_data = self.transform_data(raw_data)
             
-            return transformed_data
+            logging.info(f'Filtering {query} Data...')
+            filtered_data = self.filter_data(transformed_data, price)
+            
+            return filtered_data
         except Exception as e:
             logging.error('An Error Occured:', exc_info=e)
             raise e
