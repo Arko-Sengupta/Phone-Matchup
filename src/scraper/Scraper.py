@@ -83,52 +83,52 @@ class Scraper:
                 try:
                     product_details['url'] = url
                 except:
-                    product_details['url'] = ''
+                    product_details['url'] = '#'
                     
                 try:
                     product_details['title'] = re.sub(r'[^\x00-\x7F]+', ' ', soup.find('span', class_='B_NuCI').get_text())
                 except:
-                    product_details['title'] = ''
+                    product_details['title'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['rating'] = soup.find('div', class_='_3LWZlK').get_text()
                 except:
-                    product_details['rating'] = ''
+                    product_details['rating'] = 'NOT AVAILABLE'
                 
                 try:
                     product_details['original_price'] = soup.find('div', class_='_3I9_wc _2p6lqe').get_text()
                 except:
-                    product_details['original_price'] = ''
+                    product_details['original_price'] = 'NOT AVAILABLE'
                 
                 try:
                     product_details['discount'] = soup.find('div', class_='_3Ay6Sb _31Dcoz').get_text().split()[0]
                 except:
-                    product_details['discount'] = ''
+                    product_details['discount'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['price'] = soup.find('div', class_='_30jeq3 _16Jk6d').get_text()
                 except:
-                    product_details['price'] = ''
+                    product_details['price'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['RAM/ROM'] = soup.find_all('li', class_='_21Ahn-')[0].get_text()
                 except:
-                    product_details['RAM/ROM'] = ''
+                    product_details['RAM/ROM'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['display'] = soup.find_all('li', class_='_21Ahn-')[1].get_text()
                 except:
-                    product_details['display'] = ''
+                    product_details['display'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['camera'] = soup.find_all('li', class_='_21Ahn-')[2].get_text()
                 except:
-                    product_details['camera'] = ''
+                    product_details['camera'] = 'NOT AVAILABLE'
                     
                 try:
                     product_details['battery'] = soup.find_all('li', class_='_21Ahn-')[3].get_text()
                 except:
-                    product_details['battery'] = ''
+                    product_details['battery'] = 'NOT AVAILABLE'
 
                 return product_details
             else:
@@ -164,5 +164,5 @@ class Scraper:
             
             return df
         except Exception as e:
-            logging.error('An Error Occcured:', exc_info=e)
+            logging.error('An Error Occcured: ', exc_info=e)
             raise e

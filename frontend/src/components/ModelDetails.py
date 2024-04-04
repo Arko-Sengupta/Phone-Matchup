@@ -6,7 +6,7 @@ def Model_Details():
              
         with st.form("model_details", clear_on_submit=True):
             
-            smartphone_model = st.text_input("Smartphone Model:", value='')
+            smartphone_model = st.text_input("Smartphone Brand:", value='')
             budget = st.number_input("Budget:", min_value=0, step=2000, format='%d')
             
             submitted = st.form_submit_button("Submit")

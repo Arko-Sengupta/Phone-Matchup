@@ -89,7 +89,6 @@ class Standardizer:
             df['battery_power'] = df['battery'].apply(lambda x: self.BattPower(x))
             
             df = df.dropna()
-            df = df[['url', 'title', 'rating', 'display', 'camera', 'battery', 'model', 'color', 'RAM/ROM', 'price'] + [col for col in df.columns if col not in ['url', 'title', 'rating', 'price', 'display', 'camera', 'battery', 'model', 'color', 'RAM/ROM']]]
             
             return df
         except Exception as e:

@@ -3,11 +3,9 @@ import streamlit as st
 
 from ..Utils import bootstrap_utils
 
-def AppHeader():
+def AppHeader(title):
     try:
         bootstrap_utils()
-        
-        title = 'Phone-Matchup'
         
         st.markdown(
             """

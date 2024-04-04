@@ -4,12 +4,13 @@ import streamlit as st
 
 from frontend.src.components.Header import AppHeader
 from frontend.src.components.ModelDetails import Model_Details
+from frontend.src.components.Card import Card
 
 from src.ETLPipe import ETLPipeline
   
-def main(): 
+def App(): 
     try:
-        AppHeader()
+        AppHeader('Phone-Matchup')
         
         data = Model_Details()
         
@@ -19,13 +20,16 @@ def main():
             st.write('Enter Model')
         elif data == 'NO BUDGET':
             st.write('Enter Valid Budget')
-        else:            
+        else:              
             smartphone_model = str(data['Smartphone Model']) + ' Smart Phones'
             budget = str(data['Budget'])
             
             with st.spinner('Getting your result ready...'):
                  df = ETLPipeline().run(smartphone_model, budget)
-                 st.dataframe(df, use_container_width=True)
+                 
+                 AppHeader('Results')
+                 for index, row in df.iterrows():
+                     Card(row.to_dict())
                  
             alert = st.success("Here's your result...!")
             time.sleep(5)
@@ -37,4 +41,4 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    App()
