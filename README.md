@@ -35,12 +35,10 @@ Before diving into the project, ensure you have the following prerequisites:
    pip install -r requirements.txt
    ```
 
-4. Find `Scraper.py` follow the path `src\scraper\Scraper.py`. Find the Comment as below and Replace the Line for Testing.
-   ```bash
-   # Limit Products for Test
-   with ThreadPoolExecutor(max_workers=4) as executor:
-       product_details = list(executor.map(self.ProductDetails, list(set(products[:100]))))
-   ```
+4. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
+```bash
+TEST="100"
+```
 
 5. Start the Application
    ```bash

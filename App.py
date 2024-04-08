@@ -1,16 +1,18 @@
-import time
+import os
 import logging
 import streamlit as st
+from dotenv import load_dotenv
 
 from frontend.src.components.Header import AppHeader
 from frontend.src.components.ModelDetails import Model_Details
 from frontend.src.components.Card import Card
-
 from src.ETLPipe import ETLPipeline
+
+load_dotenv(".env")
   
 def App(): 
     try:
-        AppHeader('Phone-Matchup')
+        AppHeader(os.getenv("TITLE"))
         
         data = Model_Details()
         
@@ -24,16 +26,12 @@ def App():
             smartphone_model = str(data['Smartphone Model']) + ' Smart Phones'
             budget = str(data['Budget'])
             
-            with st.spinner('Getting your result ready...'):
-                 df = ETLPipeline().run(smartphone_model, budget)
-                 
-                 AppHeader('Results')
-                 for index, row in df.iterrows():
-                     Card(row.to_dict())
-                 
-            alert = st.success("Here's your result...!")
-            time.sleep(5)
-            alert.empty()
+            AppHeader("ETL Pipeline")
+            df = ETLPipeline().run(smartphone_model, budget)
+            
+            AppHeader('Results')
+            for index, row in df.iterrows():
+                Card(row.to_dict())
            
     except Exception as e:
         logging.error('An Error Occured: ', exc_info=e)

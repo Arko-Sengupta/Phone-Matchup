@@ -1,3 +1,4 @@
+import os
 import re
 import logging
 import requests
@@ -6,6 +7,9 @@ import pandas as pd
 from itertools import chain
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
+from dotenv import load_dotenv
+
+load_dotenv(".env")
 
 class Scraper:
     
@@ -148,7 +152,10 @@ class Scraper:
 
             # Limit Products for Test
             with ThreadPoolExecutor(max_workers=4) as executor:
-                product_details = list(executor.map(self.ProductDetails, list(set(products))))
+                if os.getenv("TEST") == "None":
+                    product_details = list(executor.map(self.ProductDetails, list(set(products))))
+                else:
+                    product_details = list(executor.map(self.ProductDetails, list(set(products[:int(os.getenv("TEST"))]))))
                 
             df = pd.DataFrame(product_details)
                 
