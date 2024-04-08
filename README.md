@@ -36,9 +36,9 @@ Before diving into the project, ensure you have the following prerequisites:
    ```
 
 4. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
-```bash
-TEST="100"
-```
+   ```bash
+   TEST="100"
+   ```
 
 5. Start the Application
    ```bash
