@@ -1,7 +1,7 @@
 import logging
 import streamlit as st
 
-def Model_Details():
+def Model_Form():
     try:
              
         with st.form("model_details", clear_on_submit=True):
@@ -18,7 +18,7 @@ def Model_Details():
                 elif budget < 2000:
                     return 'NO BUDGET'
                 else:
-                    return {"Smartphone Model": smartphone_model, "Budget": budget}
+                    return {"Smartphone Model": str(smartphone_model + " Smartphones"), "Budget": str(budget)}
      
     except Exception as e:
         logging.error('An Error Occured: ', exc_info=e)

@@ -1,6 +1,10 @@
 import re
 import logging
 
+logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.WARNING)
+
 class Standardizer:
     
     def __init__(self) -> None:

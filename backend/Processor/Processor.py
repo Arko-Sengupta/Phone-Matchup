@@ -1,6 +1,10 @@
 import logging
 
-class ProcessModel:
+logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.WARNING)
+
+class Processor:
     
     def __init__(self) -> None:
         pass

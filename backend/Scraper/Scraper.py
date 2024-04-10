@@ -9,11 +9,16 @@ from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 from dotenv import load_dotenv
 
+logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.WARNING)
+
 load_dotenv(".env")
 
 class Scraper:
     
     def __init__(self):
+        self.limit = os.getenv("TEST")
         self.session = requests.Session()
         
     def GeneratePageURL(self, page_num):
@@ -149,13 +154,12 @@ class Scraper:
             
             with ThreadPoolExecutor(max_workers=4) as executor:
                 products = list(chain.from_iterable(executor.map(self.PageProductURLs, page_urls)))
-
-            # Limit Products for Test
+                
             with ThreadPoolExecutor(max_workers=4) as executor:
                 if os.getenv("TEST") == "None":
                     product_details = list(executor.map(self.ProductDetails, list(set(products))))
                 else:
-                    product_details = list(executor.map(self.ProductDetails, list(set(products[:int(os.getenv("TEST"))]))))
+                    product_details = list(executor.map(self.ProductDetails, list(set(products[:int(self.limit)]))))
                 
             df = pd.DataFrame(product_details)
                 

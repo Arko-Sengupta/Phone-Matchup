@@ -1,42 +1,49 @@
 import os
 import logging
+import requests
+import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
-from frontend.src.components.Header import AppHeader
-from frontend.src.components.ModelDetails import Model_Details
-from frontend.src.components.Card import Card
-from src.ETLPipe import ETLPipeline
+from frontend.src.Components.Header import AppHeader
+from frontend.src.Components.ModelForm import Model_Form
+from frontend.src.Components.Card import Card
 
 load_dotenv(".env")
-  
-def App(): 
-    try:
-        AppHeader(os.getenv("TITLE"))
+
+class ETLPipe:
+    
+    def __init__(self):
+        self.title = os.getenv("TITLE")
+        self.SERVER_URL = os.getenv("SERVER_URL")
+        self.AppHeader = AppHeader
+        self.Model_Form = Model_Form
+        self.Card = Card
         
-        data = Model_Details()
-        
-        if data == 'NO MODEL & BUDGET' or data is None:
-            st.write('Enter Model and Budget')
-        elif data == 'NO MODEL':
-            st.write('Enter Model')
-        elif data == 'NO BUDGET':
-            st.write('Enter Valid Budget')
-        else:              
-            smartphone_model = str(data['Smartphone Model']) + ' Smart Phones'
-            budget = str(data['Budget'])
+    def ETL_UI(self):
+        try:
+            self.AppHeader(self.title)
             
-            AppHeader("ETL Pipeline")
-            df = ETLPipeline().run(smartphone_model, budget)
-            
-            AppHeader('Results')
-            for index, row in df.iterrows():
-                Card(row.to_dict())
-           
-    except Exception as e:
-        logging.error('An Error Occured: ', exc_info=e)
-        raise e
-        
+            data = self.Model_Form()
+            if data == 'NO MODEL & BUDGET' or data is None: st.write('Enter Model and Budget')
+            elif data == 'NO MODEL': st.write('Enter Model')
+            elif data == 'NO BUDGET': st.write('Enter Valid Budget')
+            else:
+                smartphone_model, budget = data['Smartphone Model'], data['Budget']
+                
+                with st.spinner('Getting your results ready...'):
+                    df = requests.post(self.SERVER_URL, json={"brand": smartphone_model, "price": budget})
+                    df = pd.DataFrame(df.json()['response'])
+                
+                self.AppHeader('Results')
+                for index, row in df.iterrows():
+                    Card(row.to_dict())
+                    
+        except Exception as e:
+            logging.error('An Error Occured: ', exc_info=e)
+            raise e
 
 if __name__ == "__main__":
-    App()
+    
+    App = ETLPipe()
+    App.ETL_UI()

@@ -40,7 +40,14 @@ Before diving into the project, ensure you have the following prerequisites:
    TEST="100"
    ```
 
-5. Start the Application
+5. Start Backend Server
+   ```bash
+   python ETLPipe_API.py
+   ```
+
+6. Confirm Server Start: Open the below URL at Browser: [http://localhost:5000/](http://localhost:5000/)
+
+7. Start the Application
    ```bash
    streamlit run App.py
    ```
