@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 import requests
 import pandas as pd
@@ -15,7 +16,8 @@ class ETLPipe:
     
     def __init__(self):
         self.title = os.getenv("TITLE")
-        self.SERVER_URL = os.getenv("SERVER_URL")
+        self.ERROR_MESSAGE = os.getenv("ERROR_MESSAGE")
+        self.SERVER_URL = os.getenv("ETL_PIPE_API")
         self.AppHeader = AppHeader
         self.Model_Form = Model_Form
         self.Card = Card
@@ -31,13 +33,16 @@ class ETLPipe:
             else:
                 smartphone_model, budget = data['Smartphone Model'], data['Budget']
                 
-                with st.spinner('Getting your results ready...'):
-                    df = requests.post(self.SERVER_URL, json={"brand": smartphone_model, "price": budget})
-                    df = pd.DataFrame(df.json()['response'])
-                
-                self.AppHeader('Results')
-                for index, row in df.iterrows():
-                    Card(row.to_dict())
+                try:
+                    with st.spinner('Getting your results ready...'):
+                         df = requests.post(self.SERVER_URL, json={"brand": smartphone_model, "price": budget}).json()
+                         df = pd.DataFrame(df['response'])
+                 
+                         self.AppHeader('Results')
+                         for index, row in df.iterrows():
+                             Card(row.to_dict())
+                except:
+                    Error = st.warning(self.ERROR_MESSAGE); time.sleep(5); Error.empty()
                     
         except Exception as e:
             logging.error('An Error Occured: ', exc_info=e)

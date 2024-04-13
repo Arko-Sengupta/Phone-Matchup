@@ -1,4 +1,6 @@
+import  os
 import logging
+from dotenv import load_dotenv
 from flask import Blueprint, Flask, jsonify, request
 
 logging.basicConfig(level=logging.INFO)
@@ -9,10 +11,13 @@ from backend.Scraper.Scraper import Scraper
 from backend.Processor.Processor import Processor
 from backend.Standardizer.Standardizer import Standardizer
 
+load_dotenv(".env")
+
 class ETLPipeline:
     
     def __init__(self):
-        self.raw_data = Scraper()
+        self.limit = os.getenv("TEST")
+        self.raw_data = Scraper(self.limit)
         self.transformed_data = Standardizer()
         self.filtered_data = Processor()
 
