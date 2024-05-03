@@ -1,80 +1,66 @@
 import re
+import ast
+import json
+import time
 import logging
 import requests
 import pandas as pd
 
-from itertools import chain
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
-logging.basicConfig(level=logging.INFO)
-logging.basicConfig(level=logging.ERROR)
-logging.basicConfig(level=logging.WARNING)
-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 class Scraper:
     
-    def __init__(self, limit=None):
+    def __init__(self, limit=None, Scraper_Parametres=None):
         self.limit = limit
+        self.Selenium_dict = Scraper_Parametres['Selenium_dict']
+        self.Product_Class_dict = Scraper_Parametres['Product_Class_dict']
         self.session = requests.Session()
+        self.chrome_options = Options()
+        self.chrome_driver_path = ChromeDriverManager().install()
         
-    def GeneratePageURL(self, page_num):
+    def PageProductURLs(self, query):
         try:
-            return f'https://www.flipkart.com/search?q={self.product}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&as-pos=1&as-type=HISTORY&page={page_num}'
-        except Exception as e:
-            logging.error('An Error Occured:', exc_info=e)
-            raise e
-        
-    def TotalPages(self):
-        try:
-            response = self.session.get(self.GeneratePageURL(1))
+            self.chrome_options.add_argument('--headless')
             
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'lxml')
-                
-                total_pages = soup.find('span', class_='_10Ermr')
-                total_pages = total_pages.get_text().split()
-                
-                total_products, page_products = int(total_pages[5].replace(',', '')), int(total_pages[3])
-                
-                if total_products%page_products:
-                    total_pages = total_products//page_products + 1
-                else:
-                    total_pages = total_products//page_products
-                
-                return total_pages
-            else:
-                return 0
-        except Exception as e:
-            logging.error('An Error Occured:', exc_info=e)
-            raise e
-        
-    def TotalPageURLs(self):
-        try:
-            return [self.GeneratePageURL(page_num) for page_num in range(1, self.TotalPages() + 1)]
-        except Exception as e:
-            logging.error('An Error Occured:', exc_info=e)
-            raise e
-    
-    def PageProductURLs(self, url):
-        try:
-            response = self.session.get(url)
+            driver = webdriver.Chrome(executable_path=self.chrome_driver_path, options=self.chrome_options)
+            driver.get(str(self.Selenium_dict['URL']))
             
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'lxml')
+            # Search Input EPATH is Required
+            search_input = driver.find_element(By.XPATH, str(self.Selenium_dict['INPUT_XPATH']))
+            search_input.clear()
+            search_input.send_keys(query)
+            search_input.send_keys(Keys.ENTER)
+            
+            # Next Button XPATH is Required
+            # <a> tags class Selector is Required
+            a_tags = []
+            while True:
+                page_a_tags = driver.find_elements(By.CSS_SELECTOR, str(self.Selenium_dict['a_class']))
+                a_tags.extend([a.get_attribute('href') for a in page_a_tags])
                 
-                page_product_urls = soup.find_all('a', class_='_1fQZEK')
+                try:
+                    try:
+                        next_button = driver.find_element(By.XPATH, str(self.Selenium_dict['PAGE_1_NEXT_XPATH']))
+                        next_button.click()
+                    except:
+                        next_button = driver.find_element(By.XPATH, str(self.Selenium_dict['PAGE_X_NEXT_XPATH']))
+                        next_button.click()
+                except:
+                    break
                 
-                if len(page_product_urls) == 0:
-                    page_product_urls = soup.find_all('a', class_='_2UzuFa')
-
-                page_product_urls = ['https://www.flipkart.com' + a['href'] for a in page_product_urls]
+                time.sleep(2)                
+            driver.quit()
                 
-                return page_product_urls
-            else:
-                return []
+            return list(set(a_tags))
         except Exception as e:
-            logging.error('An Error Occured:', exc_info=e)
+            logging.error('An Error Occured: ', exc_info=e)
             raise e
         
     def ProductDetails(self, url):
@@ -92,47 +78,53 @@ class Scraper:
                     product_details['url'] = '#'
                     
                 try:
-                    product_details['title'] = re.sub(r'[^\x00-\x7F]+', ' ', soup.find('span', class_='B_NuCI').get_text())
+                    title = ast.literal_eval(self.Product_Class_dict['title'])
+                    product_details['title'] = re.sub(r'[^\x00-\x7F]+', ' ', soup.find(title[0], class_=title[1]).get_text())
                 except:
                     product_details['title'] = 'NOT AVAILABLE'
                     
                 try:
-                    product_details['rating'] = soup.find('div', class_='_3LWZlK').get_text()
+                    rating = ast.literal_eval(self.Product_Class_dict['rating'])
+                    product_details['rating'] = soup.find(rating[0], class_=rating[1]).get_text()
                 except:
                     product_details['rating'] = 'NOT AVAILABLE'
                 
                 try:
-                    product_details['original_price'] = soup.find('div', class_='_3I9_wc _2p6lqe').get_text()
+                    original_price = ast.literal_eval(self.Product_Class_dict['original_price'])
+                    product_details['original_price'] = soup.find(original_price[0], class_=original_price[1]).get_text()
                 except:
                     product_details['original_price'] = 'NOT AVAILABLE'
                 
                 try:
-                    product_details['discount'] = soup.find('div', class_='_3Ay6Sb _31Dcoz').get_text().split()[0]
+                    discount = ast.literal_eval(self.Product_Class_dict['discount'])
+                    product_details['discount'] = soup.find(discount[0], class_=discount[1]).get_text().split()[0]
                 except:
                     product_details['discount'] = 'NOT AVAILABLE'
                     
                 try:
-                    product_details['price'] = soup.find('div', class_='_30jeq3 _16Jk6d').get_text()
+                    price = ast.literal_eval(self.Product_Class_dict['price'])
+                    product_details['price'] = soup.find(price[0], class_=price[1]).get_text()
                 except:
                     product_details['price'] = 'NOT AVAILABLE'
-                    
+                 
+                features = ast.literal_eval(self.Product_Class_dict['features'])   
                 try:
-                    product_details['RAM/ROM'] = soup.find_all('li', class_='_21Ahn-')[0].get_text()
+                    product_details['RAM/ROM'] = soup.find_all(features[0], class_=features[1])[0].get_text()
                 except:
                     product_details['RAM/ROM'] = 'NOT AVAILABLE'
                     
                 try:
-                    product_details['display'] = soup.find_all('li', class_='_21Ahn-')[1].get_text()
+                    product_details['display'] = soup.find_all(features[0], class_=features[1])[1].get_text()
                 except:
                     product_details['display'] = 'NOT AVAILABLE'
                     
                 try:
-                    product_details['camera'] = soup.find_all('li', class_='_21Ahn-')[2].get_text()
+                    product_details['camera'] = soup.find_all(features[0], class_=features[1])[2].get_text()
                 except:
                     product_details['camera'] = 'NOT AVAILABLE'
                     
                 try:
-                    product_details['battery'] = soup.find_all('li', class_='_21Ahn-')[3].get_text()
+                    product_details['battery'] = soup.find_all(features[0], class_=features[1])[3].get_text()
                 except:
                     product_details['battery'] = 'NOT AVAILABLE'
 
@@ -142,15 +134,10 @@ class Scraper:
         except Exception as e:
             logging.error('An Error Occured: ', exc_info=e)
             raise e
-    
+        
     def Products(self, query):
         try:
-            self.product = '+'.join(query.lower().split())
-            
-            page_urls = self.TotalPageURLs()
-            
-            with ThreadPoolExecutor(max_workers=4) as executor:
-                products = list(chain.from_iterable(executor.map(self.PageProductURLs, page_urls)))
+            products = self.PageProductURLs(query)
                 
             with ThreadPoolExecutor(max_workers=4) as executor:
                 if self.limit == None:

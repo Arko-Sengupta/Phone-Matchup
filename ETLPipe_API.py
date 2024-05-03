@@ -1,4 +1,5 @@
 import  os
+import json
 import logging
 from dotenv import load_dotenv
 from flask import Blueprint, Flask, jsonify, request
@@ -17,7 +18,9 @@ class ETLPipeline:
     
     def __init__(self):
         self.limit = os.getenv("TEST")
-        self.raw_data = Scraper(self.limit)
+        with open('Scraper_Parameters.json') as f:
+            self.data = json.load(f)
+        self.raw_data = Scraper(self.limit, self.data)
         self.transformed_data = Standardizer()
         self.filtered_data = Processor()
 
