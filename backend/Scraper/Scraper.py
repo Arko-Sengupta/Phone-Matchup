@@ -1,6 +1,5 @@
 import re
 import ast
-import json
 import time
 import logging
 import requests
