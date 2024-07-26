@@ -11,6 +11,7 @@ logging.basicConfig(level=logging.WARNING)
 from backend.Scraper.Scraper import Scraper
 from backend.Processor.Processor import Processor
 from backend.Standardizer.Standardizer import Standardizer
+
 load_dotenv(".env")
 
 class ETLPipeline:
