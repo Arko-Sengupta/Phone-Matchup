@@ -18,7 +18,7 @@ class ETLPipeline:
     
     def __init__(self):
         self.limit = os.getenv("TEST")
-        with open('Scraper_Parameters.json') as f:
+        with open('scraper_parameters.json') as f:
             self.data = json.load(f)
         self.raw_data = Scraper(self.limit, self.data)
         self.transformed_data = Standardizer()
@@ -92,6 +92,6 @@ class ETLPipe_API:
             raise e
 
 if __name__=='__main__':
-      
+    
     server = ETLPipe_API()
     server.run()
