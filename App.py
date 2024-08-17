@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 from frontend.src.Components.Header import AppHeader
 from frontend.src.Components.ModelForm import Model_Form
 from frontend.src.Components.Card import Card
-
 load_dotenv(".env")
 
 class ETLPipe:
