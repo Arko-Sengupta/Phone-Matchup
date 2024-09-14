@@ -41,7 +41,7 @@ class ETLPipe:
                          for index, row in df.iterrows():
                              Card(row.to_dict())
                 except Exception as e:
-                    Error = st.warning(self.ERROR_MESSAGE); time.sleep(5); Error.empty()
+                    Error = st.warning("An Error Occured!"); time.sleep(5); Error.empty()
                     
                     
         except Exception as e:

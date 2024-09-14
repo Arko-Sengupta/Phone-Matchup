@@ -35,19 +35,24 @@ Before diving into the project, ensure you have the following prerequisites:
    pip install -r requirements.txt
    ```
 
-4. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
+4. Open `scraper_parameters.json` and replace `Chrome_Driver_Path` with your **Chrome Driver's Path**.
+   ```bash
+   "Chrome_Driver_Path": "<YOUR_CHROME_DRIVER_PATH>"
+   ```
+
+5. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
    ```bash
    TEST="100"
    ```
 
-5. Start Backend Server
+6. Start Backend Server
    ```bash
    python ETLPipe_API.py
    ```
 
-6. Confirm Server Start: Open the below URL at Browser: [http://localhost:5000/](http://localhost:5000/)
+7. Confirm Server Start: Open the below URL at Browser: [http://localhost:5000/](http://localhost:5000/)
 
-7. Start the Application
+8. Start the Application
    ```bash
    streamlit run App.py
    ```
