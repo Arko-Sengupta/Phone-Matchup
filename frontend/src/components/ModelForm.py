@@ -38,5 +38,5 @@ def Model_Form() -> Union[str, Dict[str, str], None]:
         return None
     
     except Exception as e:
-        logging.error('An Error Occurred while processing the form.', exc_info=True)
+        logging.error('An Error Occurred while Processing the Form.', exc_info=True)
         raise e

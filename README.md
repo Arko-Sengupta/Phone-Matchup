@@ -40,7 +40,7 @@ Before diving into the project, ensure you have the following prerequisites:
    "Chrome_Driver_Path": "<YOUR_CHROME_DRIVER_PATH>"
    ```
 
-5. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
+5. For Testing the Pipeline find `.env` file. The default value of `TEST` would be `None` as it's going to Extract all the Smart Phone Data. Therefore, to save time limit the Data to `100`.
    ```bash
    TEST="100"
    ```

@@ -44,7 +44,7 @@ class Standardizer:
         try:
             return title[title.index('(') + 1 : title.index(',')].strip()
         except Exception as e:
-            logging.error('An Error Occurred while extracting Color Name: ', exc_info=e)
+            logging.error('An Error Occurred while Extracting Color Name: ', exc_info=e)
             return ''
 
     def Rating(self, rate: str) -> float:

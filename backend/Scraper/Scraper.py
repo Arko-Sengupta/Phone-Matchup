@@ -22,7 +22,7 @@ class Scraper:
         Initializes the Scraper Class with the provided parameters.
 
         Parameters:
-        limit (int): Maximum number of products to scrape (optional).
+        limit (int): Maximum number of products to scrape.
         scraper_parameters (dict): Configuration details like Selenium XPaths,
                                    Product Class Details, Chrome Driver Path & Headers
         """

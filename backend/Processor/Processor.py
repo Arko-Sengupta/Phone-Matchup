@@ -14,7 +14,7 @@ class Processor:
 
     def FilterRAM(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Filters the DataFrame to retain rows with the Maximum RAM Value.
+        Filters the DataFrame to retain rows with the Maximum RAM Values.
 
         Args:
             df (pd.DataFrame): The input DataFrame containing product data.
@@ -34,7 +34,7 @@ class Processor:
 
     def FilterROM(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Filters the DataFrame to retain rows with the Maximum ROM Value.
+        Filters the DataFrame to retain rows with the Maximum ROM Values.
 
         Args:
             df (pd.DataFrame): The input DataFrame containing product data.

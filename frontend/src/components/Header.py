@@ -16,7 +16,7 @@ def AppHeader(title: Union[str, None]) -> None:
         if not isinstance(title, (str, type(None))):
             raise ValueError("Title must be a string or None.")
         
-        # Load Bootstrap and other Utilities
+        # Load Bootstrap and Utilities
         bootstrap_utils()
 
         # Define CSS for the Header

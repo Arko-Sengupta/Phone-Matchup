@@ -4,7 +4,7 @@ from typing import Dict, Any
 
 def Card(specs: Dict[str, Any]) -> None:
     """
-    Renders a Card UI Component in Streamlit based on the provided specs dictionary.
+    Renders a Card UI Component in Streamlit based on the provided specification dictionary.
     
     Input:
     - specs: A dictionary containing the following required keys:

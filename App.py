@@ -1,5 +1,5 @@
-import os
 import time
+import os
 import logging
 import requests
 import pandas as pd
