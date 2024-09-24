@@ -1,4 +1,4 @@
-# Phone Matchup
+# Phone-Matchup
 
 ## Overview
 Welcome to _**Phone Matchup**_! _**Phone Matchup**_ is a _**ETL Pipelines**_ designed to extract and Standardize _**Smart Phone**_ data. Whether you are a developer or contributor, this _**README.md**_ will guide you through the essentials of the project.
