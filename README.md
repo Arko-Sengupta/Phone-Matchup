@@ -5,12 +5,17 @@ Welcome to _**Phone Matchup**_! _**Phone Matchup**_ is a _**ETL Pipelines**_ des
 
 ## Table of Content
 1. [Introduction](#introduction)
-2. [Getting Started](#getting-started)
-3. [Installation](#installation)
-4. [Contribution](#contribution)
+2. [Application UI](#application-ui)
+3. [Getting Started](#getting-started)
+4. [Installation](#installation)
+5. [Contribution](#contribution)
 
 ## Introduction
 **Phone Matchup** crafts an advanced **ETL Pipeline** designed to efficiently **Extract**, **Standardize**, and meticulously **Process** Smart Phone Data, tailoring the results to suit the user's budget preferences and specific brand preferences, delivering a seamless experience.
+
+## Application UI
+![Screenshot 2024-10-14 165121](https://github.com/user-attachments/assets/bc912cb8-b94f-4888-9181-bdef0bf83bdb)
+![Screenshot 2024-10-14 165036](https://github.com/user-attachments/assets/d4a8cda1-fcb4-4ac4-8278-153b77bc0055)
 
 ## Getting Started
 Before diving into the project, ensure you have the following prerequisites:
